@@ -1,0 +1,53 @@
+version: "3.7"
+services:  
+    # postgres
+    postgres:
+        image: postgres:9.6
+        user: root
+        networks: 
+            - default_net
+        volumes:
+            # Create Test database on Postgresql
+            - ./docker-airflow/pg-init-scripts:/docker-entrypoint-initdb.d
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        ports:
+            - "5439:5432"
+    #airflow
+    airflow-webserver:
+        image: airflow-spark:1.0
+        restart: always
+        networks:
+            - default_net
+        depends_on:
+            - postgres
+        volumes:
+            - ./dags:/usr/local/airflow/dags
+            - ./spark-app:/usr/local/spark/app
+            - ./res/drivers:/usr/local/spark/resources/drivers
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Local
+        ports:
+            - "9000:8282"
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+    #Jupyter notebook
+    jupyter-spark:
+        image: jupyter/pyspark-notebook:3.0.1
+        networks:
+            - default_net
+        ports:
+            - "8888:8888"
+            - "4040-4080:4040-4080"
+        volumes:
+            - ./docker-jupyter/notebooks:/home/jovyan/work/notebooks/
+            - ./res/drivers:/home/jovyan/work/jars/
+networks:
+    default_net:
