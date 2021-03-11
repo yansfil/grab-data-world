@@ -13,21 +13,27 @@ Local Machine에서 Container를 바탕으로 ETL 파이프라인을 구축하�
 
 
 ## 스택
-### Scheduler 
-Airflow
+###  Scheduler 
+Airflow 
 - localhost:9000
 
-  
 ### Data Source 
 Postgresql
-- localhost:5432
+- localhost:5439
 
 ### Visualization & REPL
-Jupyter
-- localhost:8888
+zeppelin
+- localhost:8080
 
 ### Data Ingestion
-Spark(Local mode) & Python 
+Spark(Local mode) & Python
+
+
+## TODO
+- Spark EMR 붙여서 SSH로 통신하기
+- 로그 데이터 스트리밍으로 Generation한 후 Kafka 붙이기
+- Spark Streaming 사용해보기 
+
 
 
 
