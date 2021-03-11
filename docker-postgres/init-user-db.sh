@@ -1,0 +1,6 @@
+set -e
+psql -v --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+	CREATE USER test WITH PASSWORD 'test';
+	CREATE DATABASE "$SERVICE_DB";
+	GRANT ALL PRIVILEGES ON DATABASE service TO test;
+EOSQL

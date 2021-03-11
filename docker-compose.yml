@@ -1,23 +1,10 @@
 version: "3.7"
-services:  
-    # postgres
-    postgres:
-        image: postgres:9.6
-        user: root
-        networks: 
-            - default_net
-        volumes:
-            # Create Test database on Postgresql
-            - ./docker-airflow/pg-init-scripts:/docker-entrypoint-initdb.d
-        environment:
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
-        ports:
-            - "5439:5432"
+services:
+
     #airflow
     airflow-webserver:
         image: airflow-spark:1.0
+        container_name: airflow
         restart: always
         networks:
             - default_net
@@ -30,6 +17,7 @@ services:
         environment:
             - LOAD_EX=n
             - EXECUTOR=Local
+            - AIRFLOW__CORE__FERNET_KEY='81HqDtbqAywKSOumSha3BhWNOdQ26slT6K0YaZeZyPs='
         ports:
             - "9000:8282"
         command: webserver
@@ -38,16 +26,60 @@ services:
             interval: 30s
             timeout: 30s
             retries: 3
-    #Jupyter notebook
-    jupyter-spark:
-        image: jupyter/pyspark-notebook:3.0.1
+    # postgres
+    postgres:
+        build: ./docker-postgres
+        container_name: postgres
+        user: root
         networks:
             - default_net
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+            - SERVICE_DB=service
         ports:
-            - "8888:8888"
-            - "4040-4080:4040-4080"
+            - "5439:5432"
+    #Jupyter notebook
+    spark:
+        image: bitnami/spark:3.0.1
+        user: root # Run container as root container: https://docs.bitnami.com/tutorials/work-with-non-root-containers/
+        hostname: spark
+        networks:
+            - default_net
+        environment:
+            - SPARK_MODE=master
+            - SPARK_RPC_AUTHENTICATION_ENABLED=no
+            - SPARK_RPC_ENCRYPTION_ENABLED=no
+            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+            - SPARK_SSL_ENABLED=no
+        ports:
+            - "8181:8080"
+            - "7077:7077"
+
+    spark-worker-1:
+        image: bitnami/spark:3.0.1
+        user: root
+        networks:
+            - default_net
+        environment:
+            - SPARK_MODE=worker
+            - SPARK_MASTER_URL=spark://spark:7077
+            - SPARK_WORKER_MEMORY=4G
+            - SPARK_WORKER_CORES=1
+            - SPARK_RPC_AUTHENTICATION_ENABLED=no
+            - SPARK_RPC_ENCRYPTION_ENABLED=no
+            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+            - SPARK_SSL_ENABLED=no
+
+    zeppelin:
+        image: apache/zeppelin:0.9.0
+        ports:
+            - "8080:8080"
         volumes:
-            - ./docker-jupyter/notebooks:/home/jovyan/work/notebooks/
-            - ./res/drivers:/home/jovyan/work/jars/
+            - ./notebook:/opt/zeppelin/notebook
+        environment:
+            - ZEPPELIN_NOTEBOOK_DIR=notebook
+            - ZEPPELIN_LOG_DIR=logs
 networks:
     default_net:
