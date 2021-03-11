@@ -12,6 +12,7 @@ services:
             - postgres
         volumes:
             - ./dags:/usr/local/airflow/dags
+            - ./tmp:/usr/local/airflow/tmp
             - ./spark-app:/usr/local/spark/app
             - ./res/drivers:/usr/local/spark/resources/drivers
         environment:

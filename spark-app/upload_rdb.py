@@ -7,11 +7,11 @@ spark = (SparkSession
     .builder
     .getOrCreate()
 )
-postgres_db = sys.argv[1]
+postgres_db_url = sys.argv[1]
 postgres_user = sys.argv[2]
 postgres_pwd = sys.argv[3]
 
-
+print(os.path.join(os.path.dirname(__file__),"raw_data/channels.csv"))
 df_session_ts = spark.read.option("header", "true").csv(os.path.join(os.path.dirname(__file__),"raw_data/channels.csv"))
 df_session_tx = spark.read.option("header", "true").csv(os.path.join(os.path.dirname(__file__),'raw_data/session_transactions.csv'))
 df_channel = spark.read.option("header", "true").csv(os.path.join(os.path.dirname(__file__),'raw_data/session_timestamps.csv'))
@@ -19,7 +19,7 @@ df_usc = spark.read.option("header", "true").csv(os.path.join(os.path.dirname(__
 
 def write_postgres(df,table_name):
     df.write.format("jdbc").\
-        option("url", f"jdbc:postgresql://localhost:5439/{postgres_db}").\
+        option("url", postgres_db_url).\
         option("dbtable",table_name).\
         option("user", postgres_user).\
         option("password", postgres_pwd).\

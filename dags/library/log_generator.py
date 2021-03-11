@@ -9,11 +9,10 @@ CHANNELS = ["Naver","Facebook","Youtube","Instagram","Google","Organic"]
 USER_SIZE = 1000
 AVG_SESSION_SIZE = 10
 MONTH_RANGE = 7
-channels_path = os.path.join(os.path.dirname(__file__),"tmp/channels.csv")
-usc_path = os.path.join(os.path.dirname(__file__),"tmp/user_session_channels.csv")
-session_timestamps_path = os.path.join(os.path.dirname(__file__),"tmp/session_timestamps.csv")
-session_transactions_path = os.path.join(os.path.dirname(__file__),"tmp/session_transactions.csv")
-
+channels_path = "/usr/local/airflow/tmp/channels.csv"
+usc_path = "/usr/local/airflow/tmp/user_session_channels.csv"
+session_timestamps_path = "/usr/local/airflow/tmp/session_timestamps.csv"
+session_transactions_path = "/usr/local/airflow/tmp/session_transactions.csv"
 
 class LogGenerator:
     def execute(self):
@@ -21,15 +20,14 @@ class LogGenerator:
         self.write_csv_session_with_user()
         self.write_session_transactions()
         return {
-            channels_path: channels_path,
-            usc_path: usc_path,
-            session_timestamps_path: session_transactions_path,
-            session_transactions_path: session_transactions_path
+            'channels.csv': channels_path,
+            'user_session_channels.csv': usc_path,
+            'session_timestamps.csv': session_transactions_path,
+            'session_transactions.csv'  : session_transactions_path
         }
 
     def write_channels(self):
         with open(channels_path, "w") as f:
-            f.write('channelname\n')
             for ch in CHANNELS :
                 f.write(ch+"\n")
 
