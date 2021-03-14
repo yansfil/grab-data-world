@@ -1,0 +1,127 @@
+{
+  "paragraphs": [
+    {
+      "text": "%pyspark\nspark",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-13 16:06:46.518",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Interpreter process is not running\nSLF4J: Class path contains multiple SLF4J bindings.\nSLF4J: Found binding in [jar:file:/opt/zeppelin/interpreter/spark/dep/zeppelin-spark-dependencies-0.9.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: Found binding in [jar:file:/opt/zeppelin/interpreter/spark/spark-interpreter-0.9.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.\nSLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]\n INFO [2021-03-13 16:01:59,455] ({RegisterThread} RemoteInterpreterServer.java[run]:595) - Start registration\n INFO [2021-03-13 16:01:59,456] ({RemoteInterpreterServer-Thread} RemoteInterpreterServer.java[run]:193) - Launching ThriftServer at 192.168.160.3:38583\n INFO [2021-03-13 16:02:00,757] ({RegisterThread} RemoteInterpreterServer.java[run]:609) - Registering interpreter process\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615651007484_704415338",
+      "id": "paragraph_1615651007484_704415338",
+      "dateCreated": "2021-03-13 15:56:47.484",
+      "dateStarted": "2021-03-13 16:06:46.534",
+      "dateFinished": "2021-03-13 16:06:46.541",
+      "status": "ERROR"
+    },
+    {
+      "text": "%pyspark\ndf_session_ts \u003d spark.read.format(\"jdbc\") \\\n    .option(\"dbtable\", \"service.session_timestamps\") \\\n    .load()\ndf_session_tx \u003d spark.read.format(\"jdbc\") \\\n    .option(\"dbtable\", \"service.session_transactions\") \\\n    .load()\ndf_channel \u003d spark.read.format(\"jdbc\") \\\n    .option(\"dbtable\", \"service.session_channels\") \\\n    .load()\ndf_usc \u003d spark.read.format(\"jdbc\") \\\n    .option(\"dbtable\", \"service.user_session_channels\") \\\n    .load()\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-13 16:00:31.938",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Interpreter process is not running\nSLF4J: Class path contains multiple SLF4J bindings.\nSLF4J: Found binding in [jar:file:/opt/zeppelin/interpreter/spark/dep/zeppelin-spark-dependencies-0.9.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: Found binding in [jar:file:/opt/zeppelin/interpreter/spark/spark-interpreter-0.9.0.jar!/org/slf4j/impl/StaticLoggerBinder.class]\nSLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.\nSLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]\n INFO [2021-03-13 15:59:54,966] ({RegisterThread} RemoteInterpreterServer.java[run]:595) - Start registration\n INFO [2021-03-13 15:59:54,967] ({RemoteInterpreterServer-Thread} RemoteInterpreterServer.java[run]:193) - Launching ThriftServer at 192.168.160.3:36353\n INFO [2021-03-13 15:59:56,328] ({RegisterThread} RemoteInterpreterServer.java[run]:609) - Registering interpreter process\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615651067957_24418757",
+      "id": "paragraph_1615651067957_24418757",
+      "dateCreated": "2021-03-13 15:57:47.960",
+      "dateStarted": "2021-03-13 16:00:31.953",
+      "dateFinished": "2021-03-13 16:00:31.984",
+      "status": "ERROR"
+    },
+    {
+      "text": "%pyspark\n# Monthly Active User 구하기\n\n# df_usc.show()\n# df_session_ts.show()\nfrom pyspark.sql.functions import count\ndf_session_ts.alias(\"st\").join(df_usc.alias(\"usc\"), df_session_ts.sessionid \u003d\u003d df_usc.sessionid, how\u003d\u0027left\u0027).groupby(\u0027st.ts\u0027).agg(count(\u0027usc.userid\u0027)).show()\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-03-13 15:57:19.077",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1615651013345_347493284",
+      "id": "paragraph_1615651013345_347493284",
+      "dateCreated": "2021-03-13 15:56:53.345",
+      "status": "READY"
+    }
+  ],
+  "name": "analyze",
+  "id": "2G2FMCF13",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
